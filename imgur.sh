@@ -8,10 +8,14 @@ msg() {
 }
 
 main() {
+  command -v curl >/dev/null || {
+    msg "Missing required dependency: curl"
+  }
+
   url="$1"
   target_dir="${2:-images/}"
 
-  test -z "$url" && {
+  [ "$url" ] || {
     echo "Usage: $0 URL [target_dir]"; exit
   }
 
@@ -47,7 +51,7 @@ main() {
 
     sed -n "${addrA},+${addrB}p" "$tmp" | while read -r line; do
       msg "Downloading => $line"
-      wget -q --directory-prefix="$target_dir" "$line"
+      curl -s "$line" > "${target_dir}/$(basename "$line")"
     done &
   done
 
