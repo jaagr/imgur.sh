@@ -25,10 +25,15 @@ main() {
 
   sort -u -o "$tmp" "$tmp"
   count=$(wc -l < "$tmp")
+
+  [ "$count" -eq 0 ] && {
+    msg "No images found..."; exit
+  }
+
   step=$(( count / 20 ))
+  [ $step -lt 1 ] && step=1
 
   ! [ -d "$target_dir" ] && mkdir -p "$target_dir"
-
   msg "Downloading $count images to \"$target_dir\""
 
   for i in $(seq 1 20); do
