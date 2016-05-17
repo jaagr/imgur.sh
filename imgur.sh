@@ -15,6 +15,8 @@ main() {
     echo "Usage: $0 URL [target_dir]"; exit
   }
 
+  trap 'pkill -P $$; msg "Terminated..."; exit 0' TERM INT
+
   tmp=$(mktemp -u)
 
   msg "Fetching album URL $url"
